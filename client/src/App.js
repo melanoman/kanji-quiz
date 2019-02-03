@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPencilAlt,faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faPencilAlt);
+library.add(faChalkboardTeacher);
 
 class App extends Component {
   render() {
@@ -7,9 +13,13 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <p>
-            Kanji Quiz
+            Kanji Quiz by Mel Nicholson
           </p>
         </header>
+        <body>
+          <button><FontAwesomeIcon icon="pencil-alt" />Edit</button>
+          <button><FontAwesomeIcon icon="chalkboard-teacher" />Quiz</button>
+        </body>
       </div>
     );
   }
