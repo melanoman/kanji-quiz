@@ -17,8 +17,8 @@ class App extends Component {
           </p>
         </header>
         <body>
-          <button><FontAwesomeIcon icon="pencil-alt" />Edit</button>
-          <button><FontAwesomeIcon icon="chalkboard-teacher" />Quiz</button>
+          <button><FontAwesomeIcon icon="pencil-alt" size = "8x" /></button>
+          <button><FontAwesomeIcon icon="chalkboard-teacher" size = "8x" /></button>
         </body>
       </div>
     );
