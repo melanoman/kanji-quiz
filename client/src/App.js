@@ -73,8 +73,8 @@ class EditScreen extends Component {
 
   render() {
     return (<div>
-      <div> <input
-        type="text" placeholder={this.props.lesson}
+      <div> Lesson <input
+        type="text" placeholder={this.props.lesson} size="3"
         value={this.props.lesson} onInput={(event)=>{this.newLesson(event)}}
       / ></div>
       <div>Editing lesson {this.state.lesson}</div>
