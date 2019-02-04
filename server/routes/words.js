@@ -19,13 +19,16 @@ router.get('/lesson/:lesson', function(req, res, next) {
 
 /* Shouldn't use get, but quicker to manually test for now. */
 router.get('/new/:lesson/:word/:kanji/:reading', function(req, res, next) {
+  var query2 = 'select * from questions where lesson = ' + req.params.lesson;
   var query = "insert into questions (lesson, word, kanji, reading) values (" +
               req.params.lesson + ",'" +
               req.params.word + "','" +
               req.params.kanji + "','" +
               req.params.reading + "')";
   conn.query(query, (err, data) => {
-    (err)?res.send(err):res.json({words: data});
+    (err)?res.send(err):conn.query(query2, (err, data) => {
+      (err)?res.send(err):res.json({words:data})
+    });
   });
 });
 
