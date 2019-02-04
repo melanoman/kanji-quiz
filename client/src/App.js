@@ -42,12 +42,12 @@ class App extends Component {
               </div>
             ) : (this.state.mode == edit_mode) ? (
               <div>
-                <button onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
-                <p>Edit mode</p>
+                <button className="topLeft" onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
+                <p>Edit Mode</p>
               </div>
             ) : (
               <div>
-                <button onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
+                <button className="topLeft" onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
                 <p>Quiz Mode</p>
               </div>
             )
