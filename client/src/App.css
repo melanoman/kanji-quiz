@@ -21,3 +21,7 @@
   float: left;
   top: 30;
 }
+
+.inline {
+  display: inline-block;
+}
