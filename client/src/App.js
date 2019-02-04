@@ -83,8 +83,14 @@ class EditScreen extends Component {
 
 class LessonChooser extends Component {
 
-  incr() { this.props.parent.setState({lesson: (this.props.parent.state.lesson + 1)}); }
-  decr(){ this.props.parent.setState({lesson: (this.props.parent.state.lesson - 1)}); }
+  incr() {
+    this.props.parent.setState({lesson: (this.props.parent.state.lesson + 1)});
+  }
+  decr(){
+    if (this.props.parent.state.lesson > 1) {
+      this.props.parent.setState({lesson: (this.props.parent.state.lesson - 1)});
+    }
+  }
 
   render() {
     return (<div>
