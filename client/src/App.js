@@ -40,20 +40,53 @@ class App extends Component {
                 <button onClick={() => this.edit_mode()}><FontAwesomeIcon icon="pencil-alt" size = "8x" /></button>
                 <button onClick={() => this.quiz_mode()}><FontAwesomeIcon icon="chalkboard-teacher" size = "8x" /></button>
               </div>
-            ) : (this.state.mode == edit_mode) ? (
+            ) : (this.state.mode === edit_mode) ? (
               <div>
                 <button className="topLeft" onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
-                <p>Edit Mode</p>
+                <EditScreen />
               </div>
             ) : (
               <div>
                 <button className="topLeft" onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
-                <p>Quiz Mode</p>
+                <QuizScreen />
               </div>
             )
           }
         </body>
       </div>
+    );
+  }
+}
+
+class EditScreen extends Component {
+  constructor() {
+    super();
+    this.state = {
+      lesson: 1
+    }
+  }
+
+  newLesson(event) {
+    var val = parseInt(event.target.value);
+    if (!isNaN(val)) { this.setState({lesson: val}); }
+  }
+
+  render() {
+    return (<div>
+      <div> <input
+        type="text" placeholder={this.props.lesson}
+        value={this.props.lesson} onInput={(event)=>{this.newLesson(event)}}
+      / ></div>
+      <div>Editing lesson {this.state.lesson}</div>
+      <p>Table goes here</p>
+    </div>);
+  }
+}
+
+class QuizScreen extends Component {
+  render () {
+    return (
+      <p>Quizzy stuff goes here </p>
     );
   }
 }
