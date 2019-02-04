@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt,faChalkboardTeacher,faReply, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt,faChalkboardTeacher,faReply, faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faPencilAlt);
 library.add(faChalkboardTeacher);
 library.add(faReply);
-library.add(faArrowLeft);
-library.add(faArrowRight);
+library.add(faCaretLeft);
+library.add(faCaretRight);
 
 const start_mode = 0;
 const edit_mode = 1;
@@ -94,7 +94,7 @@ class LessonChooser extends Component {
 
   render() {
     return (<div>
-      <button className="inline" onClick={()=>this.decr()}><FontAwesomeIcon icon="arrow-left" size = "4x" /></button>
+      <button className="inline" onClick={()=>this.decr()}><FontAwesomeIcon icon="caret-left" size = "4x" /></button>
       <span className="inline">
         <div>Lesson <input size="3" type="text"
            placeholder={this.props.parent.state.lesson}
@@ -103,7 +103,7 @@ class LessonChooser extends Component {
         / ></div>
         <div>Editing lesson {this.props.parent.state.lesson}</div>
       </span>
-      <button className="inline" onClick={()=>this.incr()}><FontAwesomeIcon icon="arrow-right" size = "4x" /></button>
+      <button className="inline" onClick={()=>this.incr()}><FontAwesomeIcon icon="caret-right" size = "4x" /></button>
     </div>);
   }
 }
