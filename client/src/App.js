@@ -86,7 +86,7 @@ class EditScreen extends Component {
   }
 
   render() {
-    return (<div>
+    return (<div className="center">
       <LessonChooser parent={this} />
       { (this.state.live === false) ?
         <button onClick={()=>this.showTable()}><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /></button> :
