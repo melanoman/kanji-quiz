@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt,faChalkboardTeacher,faReply, faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt,faChalkboardTeacher,faReply, faCaretLeft, faCaretRight, faCaretUp, faCaretDown }
+  from '@fortawesome/free-solid-svg-icons'
 
 library.add(faPencilAlt);
 library.add(faChalkboardTeacher);
 library.add(faReply);
 library.add(faCaretLeft);
 library.add(faCaretRight);
+library.add(faCaretUp);
+library.add(faCaretDown);
 
 const start_mode = 0;
 const edit_mode = 1;
@@ -64,7 +67,8 @@ class EditScreen extends Component {
   constructor() {
     super();
     this.state = {
-      lesson: 1
+      lesson: 1,
+      live: false
     }
   }
 
@@ -73,10 +77,22 @@ class EditScreen extends Component {
     if (!isNaN(val) && val > 0) { this.setState({lesson: val}); }
   }
 
+  showTable() {
+    this.setState({ live: true });
+  }
+
+  hideTable() {
+    this.setState({ live: false });
+  }
+
   render() {
     return (<div>
       <LessonChooser parent={this} />
-      <p>Table goes here</p>
+      { (this.state.live === false) ?
+        <button onClick={()=>this.showTable()}><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /></button> :
+        <button onClick={()=>this.hideTable()}><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /></button>
+      }
+      { this.state.live === true ? <LessonTable parent={this} /> : <p /> }
     </div>);
   }
 }
@@ -94,19 +110,27 @@ class LessonChooser extends Component {
 
   render() {
     return (<div>
-      <button className="inline" onClick={()=>this.decr()}><FontAwesomeIcon icon="caret-left" size = "4x" /></button>
+      <button className="inline" onClick={()=>this.decr()}><FontAwesomeIcon icon="caret-left" size = "2x" /></button>
       <span className="inline">
-        <div>Lesson <input size="3" type="text"
+        <div><input size="3" type="text"
            placeholder={this.props.parent.state.lesson}
            value={this.props.parent.state.lesson}
            onInput={(event)=>{this.props.parent.newLesson(event)}}
         / ></div>
-        <div>Editing lesson {this.props.parent.state.lesson}</div>
       </span>
-      <button className="inline" onClick={()=>this.incr()}><FontAwesomeIcon icon="caret-right" size = "4x" /></button>
+      <button className="inline" onClick={()=>this.incr()}><FontAwesomeIcon icon="caret-right" size = "2x" /></button>
     </div>);
   }
 }
+
+class LessonTable extends Component {
+  render() {
+    return (<div>
+      <p>Render Table</p>
+    </div>);
+  }
+}
+
 class QuizScreen extends Component {
   render () {
     return (
