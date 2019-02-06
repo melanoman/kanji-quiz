@@ -92,7 +92,7 @@ class EditScreen extends Component {
         <button onClick={()=>this.showTable()}><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /></button> :
         <button onClick={()=>this.hideTable()}><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /></button>
       }
-      { this.state.live === true ? <LessonTable parent={this} /> : <p /> }
+      <LessonTable parent={this} />
     </div>);
   }
 }
@@ -126,7 +126,10 @@ class LessonChooser extends Component {
 class LessonTable extends Component {
   render() {
     return (<div>
-      <p>Render Table</p>
+      <table>
+        <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
+        <tr><td>Put</td><td>the</td><td>data</td><td>here</td></tr>
+      </table>
     </div>);
   }
 }
