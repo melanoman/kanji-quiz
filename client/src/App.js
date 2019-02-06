@@ -41,18 +41,18 @@ class App extends Component {
         <body>
           {
             this.state.mode === start_mode ? (
-              <div>
+              <div className="center">
                 <button className="inline" onClick={() => this.edit_mode()}><FontAwesomeIcon icon="pencil-alt" size = "8x" /></button>
                 <button className="inline" onClick={() => this.quiz_mode()}><FontAwesomeIcon icon="chalkboard-teacher" size = "8x" /></button>
               </div>
             ) : (this.state.mode === edit_mode) ? (
               <div>
-                <button className="topLeft" onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
+                <button onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
                 <EditScreen />
               </div>
             ) : (
               <div>
-                <button className="topLeft" onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
+                <button onClick={() => this.start_mode()}><FontAwesomeIcon icon="reply" size = "4x" /></button>
                 <QuizScreen />
               </div>
             )
@@ -125,12 +125,16 @@ class LessonChooser extends Component {
 
 class LessonTable extends Component {
   render() {
-    return (<div>
-      <table>
-        <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
-        <tr><td>Put</td><td>the</td><td>data</td><td>here</td></tr>
-      </table>
-    </div>);
+    if(this.props.parent.state.live) {
+      return (<div>
+        <table>
+          <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
+          <tr><td>Put</td><td>data</td><td>here</td></tr>
+        </table>
+      </div>);
+    } else {
+      return <p />;
+    }
   }
 }
 
