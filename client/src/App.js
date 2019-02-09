@@ -73,8 +73,7 @@ class EditScreen extends Component {
   constructor() {
     super();
     this.state = {
-      lesson: 1,
-      live: false
+      lesson: 1
     }
   }
 
@@ -83,21 +82,9 @@ class EditScreen extends Component {
     if (!isNaN(val) && val > 0) { this.setState({lesson: val, live: false}); }
   }
 
-  showTable() {
-    this.setState({ live: true });
-  }
-
-  hideTable() {
-    this.setState({ live: false });
-  }
-
   render() {
     return (<div className="center">
       <LessonChooser parent={this} />
-      { (this.state.live === false) ?
-        <button onClick={()=>this.showTable()}><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /><FontAwesomeIcon icon="caret-down" size="2x" /></button> :
-        <button onClick={()=>this.hideTable()}><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /><FontAwesomeIcon icon="caret-up" size="2x" /></button>
-      }
       <LessonTable parent={this} />
     </div>);
   }
@@ -137,28 +124,26 @@ class LessonTable extends Component {
   }
 
   render() {
-    if(this.props.parent.state.live) {
+    { // TODO: modify this to prevent constant busy-loading
       server.get('/words/lesson/'+this.props.parent.state.lesson).then(res=> {
         this.setState({loaded: true, data: res.data.words });
       }).catch(err => {
         console.error(err);
       });
-      return (<div>
-        { this.state.loaded ?
-          <table>
-            <thead>
-              <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
-            </thead>
-            <tbody>
-              {this.state.data.map((word)=><tr key={word.ID}><td>{word.Word}</td><td>{word.Kanji}</td><td>{word.reading}</td></tr>)}
-            </tbody>
-          </table>
-          : <p>Loading</p>
-        }
-      </div>);
-    } else {
-      return <p />;
     }
+    return (<div>
+      { this.state.loaded ?
+        <table>
+          <thead>
+            <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
+          </thead>
+          <tbody>
+            {this.state.data.map((word)=><tr key={word.ID}><td>{word.Word}</td><td>{word.Kanji}</td><td>{word.reading}</td></tr>)}
+          </tbody>
+        </table>
+      : <p>Loading</p>
+      }
+    </div>);
   }
 }
 
