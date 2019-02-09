@@ -132,27 +132,29 @@ class LessonTable extends Component {
   constructor() {
     super();
     this.state = {
-      net: "Waiting for load..."
+      loaded: false
     }
   }
 
   render() {
     if(this.props.parent.state.live) {
       server.get('/words/lesson/'+this.props.parent.state.lesson).then(res=> {
-        this.setState({net: "Loaded.", data: res.data })
+        this.setState({loaded: true, data: res.data.words });
       }).catch(err => {
         console.error(err);
       });
       return (<div>
-        <table>
-          <thead>
-            <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Put</td><td>data</td><td>here</td></tr>
-          </tbody>
-        </table>
-        {this.state.net}
+        { this.state.loaded ?
+          <table>
+            <thead>
+              <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
+            </thead>
+            <tbody>
+              {this.state.data.map((word)=><tr key={word.ID}><td>{word.Word}</td><td>{word.Kanji}</td><td>{word.reading}</td></tr>)}
+            </tbody>
+          </table>
+          : <p>Loading</p>
+        }
       </div>);
     } else {
       return <p />;
