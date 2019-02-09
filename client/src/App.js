@@ -138,12 +138,24 @@ class LessonTable extends Component {
             <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
           </thead>
           <tbody>
-            {this.state.data.map((word)=><tr key={word.ID}><td>{word.Word}</td><td>{word.Kanji}</td><td>{word.reading}</td></tr>)}
+            {this.state.data.map((word)=><WordEditor word={word} parent={this} />)}
           </tbody>
         </table>
       : <p>Loading</p>
       }
     </div>);
+  }
+}
+
+class WordEditor extends Component {
+  render() {
+    return (
+      <tr key={this.props.word.ID}>
+        <td>{this.props.word.Word}</td>
+        <td>{this.props.word.Kanji}</td>
+        <td>{this.props.word.reading}</td>
+      </tr>
+    );
   }
 }
 
