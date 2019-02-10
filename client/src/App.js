@@ -143,8 +143,13 @@ class LessonTable extends Component {
   constructor() {
     super();
     this.state = {
-      loaded: false
+      loaded: false,
+      editing: -1
     }
+  }
+
+  edit(id) {
+    this.setState({editing: id});
   }
 
   render() {
@@ -163,7 +168,7 @@ class LessonTable extends Component {
             <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
           </thead>
           <tbody>
-            {this.state.data.map((word)=><WordEditor word={word} parent={this} />)}
+            {this.state.data.map((word)=><WordEditor word={word} parent={this} editing={this.state.editing===word.ID}/>)}
           </tbody>
         </table>
       : <p>Loading</p>
@@ -173,13 +178,20 @@ class LessonTable extends Component {
 }
 
 class WordEditor extends Component {
+  editMe(id) {
+    this.props.parent.edit(id);
+  }
+
   render() {
     return (
       //TODO: put click-to-edit widgets in the cells instead of just text
       <tr key={this.props.word.ID}>
-        <td>{this.props.word.Word}</td>
-        <td>{this.props.word.Kanji}</td>
-        <td>{this.props.word.reading}</td>
+          {this.props.editing ? <td>*editing*</td> : <td>{this.props.word.Word}</td>}
+          <td>{this.props.word.Kanji}</td>
+          <td>{this.props.word.reading}</td>
+          <td><button onClick={()=>this.editMe(this.props.word.ID)}>
+            <FontAwesomeIcon icon="pencil-alt" size="2x" />
+          </button></td>
       </tr>
     );
   }
