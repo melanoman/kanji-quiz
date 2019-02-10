@@ -3,8 +3,10 @@ import './App.css';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencilAlt,faChalkboardTeacher,faReply, faCaretLeft, faCaretRight, faCaretUp, faCaretDown }
-  from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt, faChalkboardTeacher, faReply,
+         faCaretLeft, faCaretRight, faCaretUp, faCaretDown,
+         faPlusCircle
+} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faPencilAlt);
 library.add(faChalkboardTeacher);
@@ -13,6 +15,7 @@ library.add(faCaretLeft);
 library.add(faCaretRight);
 library.add(faCaretUp);
 library.add(faCaretDown);
+library.add(faPlusCircle);
 
 var server = axios.create({
   baseURL: 'http://localhost:3123/',
@@ -73,7 +76,8 @@ class EditScreen extends Component {
   constructor() {
     super();
     this.state = {
-      lesson: 1
+      lesson: 1,
+      adding: false
     }
   }
 
@@ -82,11 +86,31 @@ class EditScreen extends Component {
     if (!isNaN(val) && val > 0) { this.setState({lesson: val, live: false}); }
   }
 
+  newWord() {
+    //TODO: clear the editor
+    this.setState({adding: true});
+  }
+
+  addWord() {
+    //TODO: actually add the word
+    this.setState({adding: false});
+  }
+
   render() {
     return (<div className="center">
       <LessonChooser parent={this} />
       <LessonTable parent={this} />
+      {(this.state.adding) ?
+          <NewWord parent={this}/> :
+          <button onClick={()=>this.newWord()}><FontAwesomeIcon icon="plus-circle" size="2x" /></button>
+      }
     </div>);
+  }
+}
+
+class NewWord extends Component {
+  render() {
+    return (<p>New word editor goes here</p>);
   }
 }
 
@@ -124,7 +148,7 @@ class LessonTable extends Component {
   }
 
   render() {
-    { // TODO: modify this to prevent constant busy-loading
+    { // TODO: modify this to prevent busy-loading
       server.get('/words/lesson/'+this.props.parent.state.lesson).then(res=> {
         this.setState({loaded: true, data: res.data.words });
       }).catch(err => {
