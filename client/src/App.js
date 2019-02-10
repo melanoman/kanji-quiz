@@ -77,6 +77,7 @@ class EditScreen extends Component {
     super();
     this.state = {
       lesson: 1,
+      editing: -1, //ID of word to edit
       adding: false
     }
   }
@@ -88,7 +89,7 @@ class EditScreen extends Component {
 
   newWord() {
     //TODO: clear the editor
-    this.setState({adding: true});
+    this.setState({adding: true, editing: -1});
   }
 
   addWord() {
@@ -143,13 +144,13 @@ class LessonTable extends Component {
   constructor() {
     super();
     this.state = {
-      loaded: false,
-      editing: -1
+      loaded: false
     }
   }
 
   edit(id) {
-    this.setState({editing: id});
+    this.props.parent.setState({editing: id});
+    this.props.parent.setState({adding: false});
   }
 
   render() {
@@ -168,7 +169,7 @@ class LessonTable extends Component {
             <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
           </thead>
           <tbody>
-            {this.state.data.map((word)=><WordEditor word={word} parent={this} editing={this.state.editing===word.ID}/>)}
+            {this.state.data.map((word)=><WordEditor word={word} parent={this} editing={this.props.parent.state.editing===word.ID}/>)}
           </tbody>
         </table>
       : <p>Loading</p>
