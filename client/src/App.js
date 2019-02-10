@@ -83,7 +83,7 @@ class EditScreen extends Component {
 
   newLesson(event) {
     var val = parseInt(event.target.value);
-    if (!isNaN(val) && val > 0) { this.setState({lesson: val, live: false}); }
+    if (!isNaN(val) && val > 0) { this.setState({lesson: val, live: false, adding: false }); }
   }
 
   newWord() {
@@ -99,9 +99,9 @@ class EditScreen extends Component {
   render() {
     return (<div className="center">
       <LessonChooser parent={this} />
-      <LessonTable parent={this} />
+      <LessonTable parent={this} lesson={this.state.lesson} />
       {(this.state.adding) ?
-          <NewWord parent={this}/> :
+          <NewWord parent={this} lesson={this.state.lesson} /> :
           <button onClick={()=>this.newWord()}><FontAwesomeIcon icon="plus-circle" size="2x" /></button>
       }
     </div>);
@@ -117,11 +117,11 @@ class NewWord extends Component {
 class LessonChooser extends Component {
 
   incr() {
-    this.props.parent.setState({lesson: (this.props.parent.state.lesson + 1), live: false });
+    this.props.parent.setState({lesson: (this.props.parent.state.lesson + 1), live: false, adding: false });
   }
   decr(){
     if (this.props.parent.state.lesson > 1) {
-      this.props.parent.setState({lesson: (this.props.parent.state.lesson - 1), live: false });
+      this.props.parent.setState({lesson: (this.props.parent.state.lesson - 1), live: false, adding: false });
     }
   }
 
@@ -148,6 +148,7 @@ class LessonTable extends Component {
   }
 
   render() {
+    // eslint-disable-next-line
     { // TODO: modify this to prevent busy-loading
       server.get('/words/lesson/'+this.props.parent.state.lesson).then(res=> {
         this.setState({loaded: true, data: res.data.words });
@@ -174,6 +175,7 @@ class LessonTable extends Component {
 class WordEditor extends Component {
   render() {
     return (
+      //TODO: put click-to-edit widgets in the cells instead of just text
       <tr key={this.props.word.ID}>
         <td>{this.props.word.Word}</td>
         <td>{this.props.word.Kanji}</td>
