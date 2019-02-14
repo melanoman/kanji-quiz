@@ -5,7 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencilAlt, faChalkboardTeacher, faReply,
          faCaretLeft, faCaretRight, faCaretUp, faCaretDown,
-         faPlusCircle
+         faPlusCircle, faTimesCircle, faSave
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faPencilAlt);
@@ -16,6 +16,8 @@ library.add(faCaretRight);
 library.add(faCaretUp);
 library.add(faCaretDown);
 library.add(faPlusCircle);
+library.add(faTimesCircle);
+library.add(faSave);
 
 var server = axios.create({
   baseURL: 'http://localhost:3123/',
@@ -111,7 +113,37 @@ class EditScreen extends Component {
 
 class NewWord extends Component {
   render() {
-    return (<p>New word editor goes here</p>);
+    return (
+      <table>
+        <tbody><tr>
+          <CellEditor />
+          <CellEditor />
+          <CellEditor />
+          <SaveButton />
+          <CancelButton />
+        </tr></tbody>
+      </table>
+    );
+  }
+}
+
+class CellEditor extends Component {
+  render() {
+    return (<td>CellEditor</td>);
+  }
+}
+
+class SaveButton extends Component {
+  render() {
+    return (<td><button><FontAwesomeIcon icon="save" size = "2x" /></button></td>
+    );
+  }
+}
+
+class CancelButton extends Component {
+  render() {
+    return (<td><button><FontAwesomeIcon icon="times-circle" size="2x" /></button></td>
+    );
   }
 }
 
