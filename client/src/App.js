@@ -124,13 +124,22 @@ class WordEditor extends Component {
 }
 
 class NewWord extends Component {
+  constructor() {
+    super();
+    this.state = {
+      Word:"Word",
+      Kanji:"Kanji",
+      reading:"reading"
+    };
+  }
+
   render() {
     return (
       <table>
         <tbody><tr>
-          <CellEditor />
-          <CellEditor />
-          <CellEditor />
+          <CellEditor name={this.state.Word} />
+          <CellEditor name={this.state.Kanji} />
+          <CellEditor name={this.state.reading} />
           <SaveButton />
           <CancelButton />
         </tr></tbody>
