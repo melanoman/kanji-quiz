@@ -5,7 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencilAlt, faChalkboardTeacher, faReply,
          faCaretLeft, faCaretRight, faCaretUp, faCaretDown,
-         faPlusCircle, faTimesCircle, faSave
+         faPlusCircle, faTimesCircle, faCheckCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faPencilAlt);
@@ -17,7 +17,7 @@ library.add(faCaretUp);
 library.add(faCaretDown);
 library.add(faPlusCircle);
 library.add(faTimesCircle);
-library.add(faSave);
+library.add(faCheckCircle);
 
 var server = axios.create({
   baseURL: 'http://localhost:3123/',
@@ -111,6 +111,18 @@ class EditScreen extends Component {
   }
 }
 
+class WordEditor extends Component {
+  render() {
+    return (
+      <tr>
+        <CellEditor name={this.props.word.Word} />
+        <CellEditor name={this.props.word.Kanji} />
+        <CellEditor name={this.props.word.reading} />
+      </tr>
+    );
+  }
+}
+
 class NewWord extends Component {
   render() {
     return (
@@ -127,15 +139,9 @@ class NewWord extends Component {
   }
 }
 
-class CellEditor extends Component {
-  render() {
-    return (<td>CellEditor</td>);
-  }
-}
-
 class SaveButton extends Component {
   render() {
-    return (<td><button><FontAwesomeIcon icon="save" size = "2x" /></button></td>
+    return (<td><button><FontAwesomeIcon icon="check-circle" size = "2x" /></button></td>
     );
   }
 }
@@ -210,25 +216,51 @@ class LessonTable extends Component {
   }
 }
 
-class WordEditor extends Component {
-  editMe(id) {
-    this.props.parent.edit(id);
+class CellEditor extends Component {
+  constructor() {
+    super()
+    this.state = {
+      editing: false,
+      name: ''
+    }
+  }
+
+  handleSubmit(event, editor) {
+    event.preventDefault();
+    editor.props.callback(editor.props.thing, editor.state.name)
+    editor.setState({editing: false});
+  }
+
+  handleChange(event, editor) {
+    editor.setState({name: event.target.value});
   }
 
   render() {
-    return (
-      //TODO: put click-to-edit widgets in the cells instead of just text
-      <tr key={this.props.word.ID}>
-          {this.props.editing ? <td>*editing*</td> : <td>{this.props.word.Word}</td>}
-          <td>{this.props.word.Kanji}</td>
-          <td>{this.props.word.reading}</td>
-          <td><button onClick={()=>this.editMe(this.props.word.ID)}>
-            <FontAwesomeIcon icon="pencil-alt" size="2x" />
-          </button></td>
-      </tr>
-    );
+    if (this.state.editing) {
+      var editor = this;
+      return (
+        <td className="cell-editor">
+          <form onSubmit={(event) => editor.handleSubmit(event, editor)}>
+            <input type="text" placeholder={editor.props.name} value={editor.state.name}
+                   onChange={(event)=>{editor.handleChange(event,editor)}}
+            />
+          </form>
+        </td>
+      );
+    } else {
+      var editName = () => this.setState({editing: true, name:''})
+      return (
+        <td>
+          <div onClick={()=>{this.setState({editing: true})}}>
+            {this.props.name}
+            <FontAwesomeIcon icon="alt-pencil" />
+          </div>
+        </td>
+      );
+    }
   }
 }
+
 
 class QuizScreen extends Component {
   render () {
