@@ -99,6 +99,14 @@ class EditScreen extends Component {
     this.setState({adding: false});
   }
 
+  cancelNewWord() {
+    this.setState({adding: false});
+  }
+
+  createWord(eng,kanji,reading) {
+    alert("Create"+eng+"   kanji="+kanji+"   reading="+reading);
+  }
+
   render() {
     return (<div className="center">
       <LessonChooser parent={this} />
@@ -133,15 +141,16 @@ class NewWord extends Component {
     };
   }
 
+
   render() {
     return (
       <table>
         <tbody><tr>
-          <CellEditor name={this.state.Word} />
-          <CellEditor name={this.state.Kanji} />
-          <CellEditor name={this.state.reading} />
-          <SaveButton />
-          <CancelButton />
+          <CellEditor name={this.state.Word} callback={(thing,text)=>this.setState({Word:text})} />
+          <CellEditor name={this.state.Kanji} callback={(thing,text)=>this.setState({Kanji:text})} />
+          <CellEditor name={this.state.reading} callback={(thing,text)=>this.setState({reading:text})} />
+          <SaveButton callback={()=>this.props.parent.createWord(this.state.Word, this.state.Kanji, this.state.reading)} />
+          <CancelButton callback={()=>this.props.parent.cancelNewWord()} />
         </tr></tbody>
       </table>
     );
@@ -150,14 +159,14 @@ class NewWord extends Component {
 
 class SaveButton extends Component {
   render() {
-    return (<td><button><FontAwesomeIcon icon="check-circle" size = "2x" /></button></td>
+    return (<td><button onClick={this.props.callback}><FontAwesomeIcon icon="check-circle" size = "2x" /></button></td>
     );
   }
 }
 
 class CancelButton extends Component {
   render() {
-    return (<td><button><FontAwesomeIcon icon="times-circle" size="2x" /></button></td>
+    return (<td><button onClick={this.props.callback}><FontAwesomeIcon icon="times-circle" size="2x" /></button></td>
     );
   }
 }
@@ -216,7 +225,7 @@ class LessonTable extends Component {
             <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
           </thead>
           <tbody>
-            {this.state.data.map((word)=><WordEditor word={word} parent={this} editing={this.props.parent.state.editing===word.ID}/>)}
+            {this.state.data.map((word)=><WordEditor key={word.ID} word={word} parent={this} />)}
           </tbody>
         </table>
       : <p>Loading</p>
@@ -262,7 +271,6 @@ class CellEditor extends Component {
         <td>
           <div onClick={()=>{this.setState({editing: true})}}>
             {this.props.name}
-            <FontAwesomeIcon icon="alt-pencil" />
           </div>
         </td>
       );
