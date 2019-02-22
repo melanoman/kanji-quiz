@@ -79,14 +79,21 @@ class EditScreen extends Component {
     super();
     this.state = {
       lesson: 1,
+      live: false,
+      loading: false,
       editing: -1, //ID of word to edit
-      adding: false
+      adding: false,
+      words: []
     }
   }
 
-  newLesson(event) {
+  setLesson(event) {
     var val = parseInt(event.target.value);
-    if (!isNaN(val) && val > 0) { this.setState({lesson: val, live: false, adding: false }); }
+    this.newLesson(val);
+  }
+
+  newLesson(val) {
+    if (!isNaN(val) && val > 0) { this.setState({lesson: val, live: false, adding: false, loading: false, words:[] }); }
   }
 
   newWord() {
@@ -107,10 +114,20 @@ class EditScreen extends Component {
     alert("Create"+eng+"   kanji="+kanji+"   reading="+reading);
   }
 
+  loadWords() {
+    this.setState({loading: true});
+    server.get('/words/lesson/'+this.state.lesson).then(res=> {
+      this.setState({live: true, words: res.data.words });
+    }).catch(err => {
+      console.error(err);
+    });
+  }
+
   render() {
+    if(!this.state.live && !this.state.loading) { this.loadWords(); }
     return (<div className="center">
       <LessonChooser parent={this} />
-      <LessonTable parent={this} lesson={this.state.lesson} />
+      <LessonTable parent={this} lesson={this.state.lesson} words={this.state.words} />
       {(this.state.adding) ?
           <NewWord parent={this} lesson={this.state.lesson} /> :
           <button onClick={()=>this.newWord()}><FontAwesomeIcon icon="plus-circle" size="2x" /></button>
@@ -174,12 +191,10 @@ class CancelButton extends Component {
 class LessonChooser extends Component {
 
   incr() {
-    this.props.parent.setState({lesson: (this.props.parent.state.lesson + 1), live: false, adding: false });
+    this.props.parent.newLesson(this.props.parent.state.lesson + 1);
   }
   decr(){
-    if (this.props.parent.state.lesson > 1) {
-      this.props.parent.setState({lesson: (this.props.parent.state.lesson - 1), live: false, adding: false });
-    }
+    this.props.parent.newLesson(this.props.parent.state.lesson - 1);
   }
 
   render() {
@@ -188,7 +203,7 @@ class LessonChooser extends Component {
       <span className="inline">
         <div><input size="3" type="text"
            placeholder={this.props.parent.state.lesson}
-           onInput={(event)=>{this.props.parent.newLesson(event)}}
+           onInput={(event)=>{this.props.parent.setLesson(event)}}
         / ></div>
       </span>
       <button className="inline" onClick={()=>this.incr()}><FontAwesomeIcon icon="caret-right" size = "2x" /></button>
@@ -197,38 +212,23 @@ class LessonChooser extends Component {
 }
 
 class LessonTable extends Component {
-  constructor() {
-    super();
-    this.state = {
-      loaded: false
-    }
-  }
-
   edit(id) {
     this.props.parent.setState({editing: id});
     this.props.parent.setState({adding: false});
   }
 
   render() {
-    // eslint-disable-next-line
-    { // TODO: modify this to prevent busy-loading
-      server.get('/words/lesson/'+this.props.parent.state.lesson).then(res=> {
-        this.setState({loaded: true, data: res.data.words });
-      }).catch(err => {
-        console.error(err);
-      });
-    }
     return (<div>
-      { this.state.loaded ?
+      { this.props.words ?
         <table>
           <thead>
             <tr><th>English</th><th>Kanji</th><th>reading</th></tr>
           </thead>
           <tbody>
-            {this.state.data.map((word)=><WordEditor key={word.ID} word={word} parent={this} />)}
+            {this.props.words.map((word)=><WordEditor key={word.ID} word={word} parent={this} />)}
           </tbody>
         </table>
-      : <p>Loading</p>
+      : <p>No words to display</p>
       }
     </div>);
   }
